@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 MAINTAINER Daniele De Lorenzi <daniele.delorenzi@fastnetserv.net>
 
 RUN apt update && \
-    apt install curl wget openjdk-8-jdk build-essential -y
+    apt install curl wget openjdk-8-jdk build-essential git -y
     
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
