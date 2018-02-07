@@ -6,7 +6,7 @@ RUN apt update && \
     
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN git clone -b master https://github.com/dularion/streama.git && \
+RUN git clone -b stable https://github.com/dularion/streama.git && \
     cd streama && make && chmod u+x streama.war && \
     cp docs/sample_application.yml .
     
