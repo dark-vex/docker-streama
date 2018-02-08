@@ -8,7 +8,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN git clone -b master https://github.com/dularion/streama.git && \
     cd streama && ./gradlew assemble && mkdir -p /data/streama && \
-    mv ./build/libs/streama-* /data/streama/streama.war && \
+    mv ./build/libs/streama-*.war /data/streama/streama.war && \
     chmod u+x /data/streama/streama.war && \
     cp docs/sample_application.yml .
 
