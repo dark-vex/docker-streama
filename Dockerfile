@@ -8,17 +8,17 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN git clone -b master https://github.com/streamaserver/streama.git && \
     cd streama && ./gradlew assemble && mkdir -p /data/streama && \
-    mv ./build/libs/streama-*.war /data/streama/streama.war && \
-    chmod u+x /data/streama/streama.war && \
+    mv ./build/libs/*.jar /data/streama/streama.jar && \
+    chmod u+x /data/streama/streama.jar && \
     cp docs/sample_application.yml .
 
 # test for image scanner
-RUN cat <<EOF > /root/credentials \n \
-    AWS_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE \n \
-    AWS_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \n \
-    SUPERKEY \n \
-    EOF
+RUN echo "AWS_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE" >> /root/credentials
+RUN echo "AWS_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" >> /root/credentials
+RUN echo "SOME_SECRET_KEY=AKIAIOSFODNN7EXAMPLE" >> /root/credentials
+RUN echo "MY_SECRET_KE=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" >> /root/credentials
 
 EXPOSE 8080
 
-CMD ["./data/streama/streama.war"]
+#CMD ["./data/streama/streama.war"]
+CMD ["java -Dgrails.env=$ACTIVE_PROFILE -jar ./data/streama/streama.jar"]
