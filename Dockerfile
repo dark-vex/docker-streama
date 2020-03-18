@@ -13,10 +13,10 @@ RUN git clone -b master https://github.com/dularion/streama.git && \
     cp docs/sample_application.yml .
 
 # test for image scanner
-RUN cat <<EOF > /root/credentials
-    AWS_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE
-    AWS_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-    SUPERKEY
+RUN cat <<EOF > /root/credentials \n \
+    AWS_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE \n \
+    AWS_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \n \
+    SUPERKEY \n \
     EOF
 
 EXPOSE 8080
