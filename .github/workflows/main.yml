@@ -20,6 +20,10 @@ jobs:
         uses: actions/checkout@v2
 
       - id: foo
-        uses: actions/docker-streama@v1
-        #with:
-        #  who-to-greet: 'Mona the Octocat'
+        uses: ./.github/actions/test-action
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+          SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
