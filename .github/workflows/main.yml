@@ -11,8 +11,8 @@ on:
 jobs:
   build_amd64:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #env:
+    #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
       # Check out code
@@ -30,8 +30,8 @@ jobs:
 
   build_arm64:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #env:
+    #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
       # Check out code
