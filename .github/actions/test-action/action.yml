@@ -1,22 +1,21 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  #GITHUB_TOKEN:
-  #  description: 'A Github PAT'
-  #  required: true
-  #DOCKER_USER:
-  #  description: 'Docker User'
-  #  required: true
-  #DOCKER_PASS:
-  #  description: 'Docker Pass'
-  #  required: true
-  #SYSDIG_SECURE_TOKEN:
-  #  description: 'Secure API Token'
-  #  required: true
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  GITHUB_TOKEN:
+    description: 'A Github PAT'
     required: true
-    default: 'World'
+  DOCKER_USER:
+    description: 'Docker User'
+    required: true
+  DOCKER_PASS:
+    description: 'Docker Pass'
+    required: true
+  SYSDIG_SECURE_TOKEN:
+    description: 'Secure API Token'
+    required: true
+  platform: 
+    description: 'specify build platform'
+    required: true
 outputs:
   versioning:
     description: "test" 
@@ -35,8 +34,8 @@ runs:
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASS }}
+        username: ${{ inputs.DOCKER_USER }}
+        password: ${{ inputs.DOCKER_PASS }}
     # Create a release after a successfull build and image scanning
     - id: release
       uses: rymndhng/release-on-push-action@master
@@ -57,7 +56,7 @@ runs:
 
     - name: Generate static files
       run: |
-        docker buildx build --push --platform linux/amd64 -t docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }} -t docker.io/darkvex/docker-streama:test -f Dockerfile .
+        docker buildx build --push --platform ${{ inputs.platform }} -t docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }} -t docker.io/darkvex/docker-streama:test -f Dockerfile .
       shell: bash
       
 
@@ -67,8 +66,8 @@ runs:
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASS }}
+        username: ${{ inputs.DOCKER_USER }}
+        password: ${{ inputs.DOCKER_PASS }}
     #- name: Download artifact
     #  uses: actions/download-artifact@v2
     #  with:
@@ -84,7 +83,7 @@ runs:
       uses: sysdiglabs/scan-action@v3
       with:
         image-tag: "docker.io/darkvex/docker-streama:test"
-        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        sysdig-secure-token: ${{ inputs.SYSDIG_SECURE_TOKEN }}
         input-type: docker-daemon
         run-as-user: root
 

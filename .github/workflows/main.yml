@@ -1,4 +1,4 @@
-name: Build multi-arch image and deploy
+name: Build multi-arch image
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
@@ -9,7 +9,7 @@ on:
     branches: [ master ]
   
 jobs:
-  build_arlfail:
+  build_amd64:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -19,7 +19,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: foo
-        uses: actions/docker-streama@v1
-        #with:
-        #  who-to-greet: 'Mona the Octocat'
+      - id: amd64
+        uses: ./.github/actions/test-action
+        with:
+          platform: "linux/amd64"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+          SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+
+  build_arm64:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      # Check out code
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: arm64
+        uses: ./.github/actions/test-action
+        with:
+          platform: "linux/arm64"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+          SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
