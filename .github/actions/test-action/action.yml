@@ -14,15 +14,12 @@ inputs:
     description: 'Secure API Token'
     required: true
   platform: 
-    description: 'specify build platform'
+    description: 'build platform'
     required: true
 outputs:
   versioning:
-    description: "test" 
+    description: "app version" 
     value: ${{ steps.versioning.outputs.version-id }}
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
   steps:
@@ -36,7 +33,7 @@ runs:
       with:
         username: ${{ inputs.DOCKER_USER }}
         password: ${{ inputs.DOCKER_PASS }}
-    # Create a release after a successfull build and image scanning
+    # Create a release
     - id: release
       uses: rymndhng/release-on-push-action@master
       with:
@@ -54,6 +51,14 @@ runs:
       run: echo "::set-output name=version-id::$(echo $RANDOM)"
       shell: bash
 
+    # Workaround for issue https://github.com/docker/buildx/issues/495#issuecomment-918925854
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+      with:
+        image: tonistiigi/binfmt:latest
+        platforms: all
+
     - name: Generate static files
       run: |
         docker buildx build --push --platform ${{ inputs.platform }} -t docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }} -t docker.io/darkvex/docker-streama:test -f Dockerfile .
@@ -68,10 +73,6 @@ runs:
       with:
         username: ${{ inputs.DOCKER_USER }}
         password: ${{ inputs.DOCKER_PASS }}
-    #- name: Download artifact
-    #  uses: actions/download-artifact@v2
-    #  with:
-    #    name: Save image version
 
     - name: Generate static files
       run: |
