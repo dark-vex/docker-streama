@@ -76,14 +76,23 @@ runs:
 
     - name: Generate static files
       run: |
-        docker pull docker.io/darkvex/docker-streama:test
+        docker pull docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }}
       shell: bash
+
+    #- name: Scan image
+    #  id: scan
+    #  uses: sysdiglabs/scan-action@v3
+    #  with:
+    #    image-tag: "docker.io/darkvex/docker-streama:test"
+    #    sysdig-secure-token: ${{ inputs.SYSDIG_SECURE_TOKEN }}
+    #    input-type: docker-daemon
+    #    run-as-user: root
 
     - name: Scan image
       id: scan
       uses: sysdiglabs/scan-action@v3
       with:
-        image-tag: "docker.io/darkvex/docker-streama:test"
+        image-tag: "docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }}"
         sysdig-secure-token: ${{ inputs.SYSDIG_SECURE_TOKEN }}
         input-type: docker-daemon
         run-as-user: root
