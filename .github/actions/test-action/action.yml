@@ -102,3 +102,13 @@ runs:
       if: always()
       with:
         sarif_file: ${{ steps.scan.outputs.sarifReport }}
+
+    - name: Echo dummy step
+      run: |
+        echo "Hey! I'm a dummy step of composite action"
+      shell: bash
+
+    - name: Echo dummy step 2
+      run: |
+        echo "Hey! I'm another dummy step of composite action"
+      shell: bash
