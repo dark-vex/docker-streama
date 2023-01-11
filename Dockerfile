@@ -1,4 +1,4 @@
-FROM openjdk:20-ea-15-slim-bullseye
+FROM openjdk:20-ea-29-jdk-slim
 
 WORKDIR /app/streama
 
