@@ -79,29 +79,23 @@ runs:
         docker pull docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }}
       shell: bash
 
-    #- name: Scan image
-    #  id: scan
-    #  uses: sysdiglabs/scan-action@v3
-    #  with:
-    #    image-tag: "docker.io/darkvex/docker-streama:test"
-    #    sysdig-secure-token: ${{ inputs.SYSDIG_SECURE_TOKEN }}
-    #    input-type: docker-daemon
-    #    run-as-user: root
-
-    - name: Scan image
+    - name: Image Scan
       id: scan
-      uses: sysdiglabs/scan-action@v3
-      with:
-        image-tag: "docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }}"
-        sysdig-secure-token: ${{ inputs.SYSDIG_SECURE_TOKEN }}
-        input-type: docker-daemon
-        run-as-user: root
+      env:
+        WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+        WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+      run: |
+        curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64
+        chmod +x wizcli
+        ./wizcli scan container-image ghcr.io/dark-vex/zabbix-server-mysql:latest --sarif-output-file=sarif.json
+      shell: bash
 
-    #- name: Update Scan results
-    #  uses: github/codeql-action/upload-sarif@v1
-    #  if: always()
-    #  with:
-    #    sarif_file: ${{ steps.scan.outputs.sarifReport }}
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v4
+      #Upload SARIF file
+      if: success() || failure()
+      with:
+        sarif_file: ${{ github.workspace }}/sarif.json
 
     - name: Echo dummy step
       run: |
