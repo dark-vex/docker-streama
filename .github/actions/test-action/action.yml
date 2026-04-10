@@ -87,7 +87,7 @@ runs:
       run: |
         curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64
         chmod +x wizcli
-        ./wizcli scan container-image ghcr.io/dark-vex/zabbix-server-mysql:latest --sarif-output-file=sarif.json
+        ./wizcli scan container-image docker.io/darkvex/docker-streama:test-${{ steps.release.outputs.version }} --sarif-output-file=sarif.json
       shell: bash
 
     - name: Upload SARIF file
